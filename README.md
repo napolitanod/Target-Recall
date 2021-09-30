@@ -1,12 +1,12 @@
 A small module the captures a token's targets at turn end and recalls them on the token's next turn.
 
 ## Includes
-1. Automated capture of targets at token's turn end. This is capture by user id, allowing for differentiation if more than one user is controlling the token.
-2. Automated recall of targets from last turn on token's turn start.
-3. Ability to scroll through target history using keybinds.
+1. Automated capture of the owner's current targets at token's turn end. This is captured by user id, allowing for differentiation if more than one user (e.g., the GM) is controlling the token.
+2. Automated recall of targets from the previous turn on the token's turn start.
+3. Ability to scroll through target history using < and > keys along with CTRL.
 4. Option to disable target recall by user or by token.
-5. Option to automatically select/take control of token at turn start, clearing any previous token (restricted to token owners).
-6. Option to automatically clear targets at turn start for disabled users or tokens.
+5. Option to automatically select/take control of an owned token at it's turn start, clearing any previously token currently selected by that user.
+6. Option to automatically clear existing targets at turn start.
 
 ##Settings
 Listed below are custom settings available for this module
