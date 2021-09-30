@@ -33,7 +33,6 @@ export class targetRecall {
 
     static getRecall(combatId, combatantId, addNew = false){
       const t = game.combats.get(combatId)?.combatants.get(combatantId)?.getFlag(this.ID, this.FLAGS.TARGETRECALL + `.${game.user.id}`);
-      console.log(t)
       return t ? targetRecall._toClass(t) : addNew ? new recall(combatId, combatantId) : false;
     }  
 
@@ -66,7 +65,6 @@ export class targetRecall {
       } else {
         r = targetRecall.getRecall(combatId, combatantId)
       }
-      console.log(r)
       if(r) {result = await r.recall(past)}
       return result
     }
