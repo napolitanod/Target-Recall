@@ -1,0 +1,32 @@
+{
+    "author": "napolitanod",
+    "authors": [
+        {
+            "name": "napolitanod"
+        }
+    ],
+    "description": "Remembers, recalls and applies the token's last target during combat.",
+    "esmodules": [
+        "scripts/index.js",
+        "scripts/target-recall.js"
+    ],
+    "languages": [
+        {
+            "lang": "en",
+            "name": "English",
+            "path": "languages/en.json"
+        }
+    ],
+    "minimumCoreVersion": "0.8.6",
+    "compatibleCoreVersion": "0.8.9",
+    "name": "target-recall",
+    "socket": true,
+    "styles": [
+        "styles/target-recall.css"
+    ],
+    "title": "Target Recall",
+    "version": "0.0.1",
+    "url": "https://github.com/napolitanod/Target-Recall",
+    "manifest": "https://raw.githubusercontent.com/napolitanod/Target-Recall/master/module.json",
+    "download": "https://github.com/napolitanod/Target-Recall/releases/download/0.0.1/module.zip"
+}
