@@ -26,3 +26,8 @@ Set the amount of rounds to retain target history. Note, history is retained on 
 
 ### Clear Targets
 * For tokens that do not have target recall enabled or that have no recall history, this setting will clear any current selected targets on the turn start. 
+
+## Disable Target Recall on Individual Token
+A user can disable Target Recall at the token level. This is applied just for the individual user. This allows a user to keep Target Recall enabled for other tokens while bypassing this token. To do this, right click on that token's target button within the token HUD.
+
+![image](https://user-images.githubusercontent.com/22696153/135369902-3f7513e5-59be-4916-b4c8-102b9eed0d60.png)
