@@ -5,7 +5,7 @@ shown here, as the GM toggles through their creatures' turns, the previous targe
 
 ## Includes
 1. Automated capture of the owner's current targets at token's turn end. This is captured by user id, allowing for differentiation if more than one user (e.g., the GM) is controlling the token.
-2. Automated recall of targets from the previous turn on the token's turn start.
+2. Automated recall of targets from the previous turn on the token's turn start. Recall targets are targeted at turn start, unless that target is marked defeated.
 3. Ability to scroll through target history using < and > keys along with CTRL.
 4. Option to disable target recall by user or by token.
 5. Option to automatically select/take control of an owned token at it's turn start, clearing any previously token currently selected by that user.
