@@ -20,20 +20,19 @@ Several commonly installed modules _remove_ targets at the start of every round.
 Listed below are custom settings available for this module
 
 ### Keybinds
-* Scroll through target history during combat by using CTRL+< (comma) or CTRL+> (period) on token's turn when token is selected.
-* Keybinds can be disabled by GM within settings.
+Scroll through target history during combat by using CTRL+< (comma) or CTRL+> (period) on token's turn when token is selected. Keybinds can be disabled by GM within settings.
 
 ### Target History Rounds Retained
 Set the amount of rounds to retain target history. Note, history is retained on the combatant, so will be deleted when the combat is ended.
 
 ### Enable Target Recall
-* Client level setting that enables or disable Target Recall functionality.
+Client level setting that enables or disable Target Recall functionality.
 
 ### Select Token on Turn Start
-* Selects owner's token on that token's turn, clearing any existing selected token's for that user. This option is available on several common modules so comes unselected to start.
+Selects owner's token on that token's turn, clearing any existing selected token's for that user. This option is available on several common modules so comes unselected to start.
 
 ### Clear Targets
-* For tokens that do not have target recall enabled or that have no recall history, this setting will clear any current selected targets on the turn start. 
+For tokens that do not have target recall enabled or that have no recall history, this setting will clear any current selected targets on the turn start. 
 
 ## Disable Target Recall on Individual Token
 A user can disable Target Recall at the token level. This is applied just for the individual user. This allows a user to keep Target Recall enabled for other tokens while bypassing this token. To do this, right click on that token's target button within the token HUD - it's background will shade red.
