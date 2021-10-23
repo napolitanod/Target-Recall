@@ -19,7 +19,7 @@ shown here, as the GM toggles through their creatures' turns, the previous targe
 6. Option to automatically clear existing targets at turn start.
 
 ## HEADS UP - Other Modules with settings that will prevent target recall 
-Several commonly installed modules have settings that, if enabled, will _remove_ targets at the start of every round. These include: MidiQol, Combat Enhancements, Combat Booster, Monks Little Details, Next Up, Combat Utility Belt. For each of these modules, this setting is optional. In order to token recall to actually target tokens automatically at the start of a round, you must update the settings for these modules so that they do not clear targets. Target Recall comes with a setting that clears targets which will accomodate the recall feature, so you can toggle that on in this module instead if you wish to continue to use it.
+Several commonly installed modules have settings that, if enabled, will _remove_ targets at the start of every round. These include: MidiQol, Combat Enhancements, DnD5e Helpers, Monks Little Details, Next Up, Combat Utility Belt. For each of these modules, this setting is optional. In order to token recall to actually target tokens automatically at the start of a round, you must update the settings for these modules so that they do not clear targets. Target Recall comes with a setting that clears targets which will accomodate the recall feature, so you can toggle that on in this module instead if you wish to continue to use it.
 
 ## Settings
 Listed below are custom settings available for this module
