@@ -9,7 +9,12 @@ export class targetRecall {
       TARGETRECALL: 'target-recall',
       SUPPRESS: 'suppress'
     }
-    
+
+    static KEYBINDS = {
+      BACK: 'history-back',
+      FORWARD: 'history-forward'
+    }
+
     static TEMPLATES = {}
 
     /**
