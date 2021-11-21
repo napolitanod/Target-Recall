@@ -58,26 +58,40 @@ Hooks.once('init', async function() {
 		type: Boolean
 	});
 
-   
- });
-
- /**
-  * Register debug flag with developer mode's custom hook
-  */
- Hooks.once('ready',async function() {
     if(game.settings.get(targetRecall.ID, 'keybind')) {
-        document.addEventListener("keydown", event => {    
-            if(event.ctrlKey || event.metaKey){
-                switch(event.key) {
-                    case ",":
-                        targetRecall.recall(true);
-                        break;
-                    case ".":
-                        targetRecall.recall(false);
-                        break;
-                }
+        game.keybindings.register(targetRecall.ID, targetRecall.KEYBINDS.BACK, {
+            name: "Scroll Target History Backward",
+            hint: "Scrolls back through user's target history for the selected combatant.",
+            uneditable: [
+            {
+                key: ",",
+                modifiers: [ "CONTROL" ]
             }
-        })
+            ],
+            onDown: () => {
+                targetRecall.recall(true); 
+            },
+            onUp: () => {},
+            restricted: false,
+            precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
+        });
+
+        game.keybindings.register(targetRecall.ID, targetRecall.KEYBINDS.FORWARD, {
+            name: "Scroll Target History Forward",
+            hint: "Scrolls forward through user's target history for the selected combatant.",
+            uneditable: [
+            {
+                key: ".",
+                modifiers: [ "CONTROL" ]
+            }
+            ],
+            onDown: () => {
+                targetRecall.recall(false); 
+            },
+            onUp: () => {},
+            restricted: false,
+            precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
+        });
     }
  });
  
