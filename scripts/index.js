@@ -59,13 +59,14 @@ Hooks.once('init', async function() {
 	});
 
     if(game.settings.get(targetRecall.ID, 'keybind')) {
+        const {SHIFT, CONTROL, ALT} = KeyboardManager.MODIFIER_KEYS;
         game.keybindings.register(targetRecall.ID, targetRecall.KEYBINDS.BACK, {
             name: "Scroll Target History Backward",
             hint: "Scrolls back through user's target history for the selected combatant.",
             uneditable: [
             {
-                key: ",",
-                modifiers: [ "CONTROL" ]
+                key: "Comma",
+                modifiers: [ CONTROL]
             }
             ],
             onDown: () => {
@@ -81,8 +82,8 @@ Hooks.once('init', async function() {
             hint: "Scrolls forward through user's target history for the selected combatant.",
             uneditable: [
             {
-                key: ".",
-                modifiers: [ "CONTROL" ]
+                key: "Period",
+                modifiers: [CONTROL]
             }
             ],
             onDown: () => {
