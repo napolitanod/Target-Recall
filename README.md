@@ -1,7 +1,4 @@
 ![all versions](https://img.shields.io/github/downloads/napolitanod/Target-Recall/total) 
-![Latest Release Download Count](https://img.shields.io/github/downloads/napolitanod/Target-Recall/latest/module.zip)
-[![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Ftarget-recall&colorB=4aa94a)](https://forge-vtt.com/bazaar#package=target-recall)
-[![Foundry Hub Endorsements](https://img.shields.io/endpoint?logoColor=white&url=https%3A%2F%2Fwww.foundryvtt-hub.com%2Fwp-json%2Fhubapi%2Fv1%2Fpackage%2Ftarget-recall%2Fshield%2Fendorsements)](https://www.foundryvtt-hub.com/package/target-recall/)
 
 # Target Recall
 
