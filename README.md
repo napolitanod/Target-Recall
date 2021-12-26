@@ -6,7 +6,8 @@
 # Target Recall
 
 A small Foundry VTT module that captures a token's targets at turn end and recalls them on the token's next turn.
-<img src="https://user-images.githubusercontent.com/22696153/135372384-17a0ab9b-79dd-4b0a-948d-6d8d4ead7f71.gif" height="400">
+<img src="https://user-images.githubusercontent.com/22696153/147415399-5a0fc1b1-933f-411b-9496-8b3523e6f3c8.gif" height="500">
+
 
 shown here, as the GM toggles through their creatures' turns, the previous target for that creature is recalled. Shown at the GIF end is the keybind scroll functionality.
 
