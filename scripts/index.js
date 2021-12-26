@@ -1,4 +1,5 @@
 import {targetRecall} from "./target-recall.js";
+import {api} from './api.js';
 
 Hooks.once('init', async function() { 
     const module = 'target-recall';
@@ -13,30 +14,6 @@ Hooks.once('init', async function() {
 		config: true,
 		default: true,
 		type: Boolean
-	});
-
-    game.settings.register(module, "keybind", {
-		name: game.i18n.localize("TARGETRECALL.setting.keybind.label"),
-		hint: game.i18n.localize("TARGETRECALL.setting.keybind.description"),
-		scope: "world",
-		config: true,
-		default: true,
-		type: Boolean,
-        onChange: debouncedReload
-	});
-
-    game.settings.register(module, "history", {
-		name: game.i18n.localize("TARGETRECALL.setting.history.label"),
-		hint: game.i18n.localize("TARGETRECALL.setting.history.description"),
-		scope: "world",
-		config: true,
-        default: 5,
-        type: Number,
-        range: {
-            min: 1,
-            max: 10,
-            step: 1
-        }
 	});
 
     game.settings.register(module, "control", {
@@ -58,6 +35,90 @@ Hooks.once('init', async function() {
 		type: Boolean
 	});
 
+    game.settings.register(module, "marker", {
+        name: game.i18n.localize("TARGETRECALL.setting.marker.label"),
+        hint: game.i18n.localize("TARGETRECALL.setting.marker.description"),
+        scope: "world",
+        config: true,
+        type: String,
+        filePicker: "imagevideo"
+    });
+
+    game.settings.register(module, "marker-scale", {
+        name: game.i18n.localize("TARGETRECALL.setting.marker.scale.label"),
+        hint: game.i18n.localize("TARGETRECALL.setting.marker.scale.description"),
+        scope: "world",
+        config: true,
+        default: 1.0,
+        type: Number,
+        range: {
+            min: 0.1,
+            max: 10.0,
+            step: 0.1
+        }
+    });
+
+    game.settings.register(module, "marker-duration", {
+        name: game.i18n.localize("TARGETRECALL.setting.marker.duration.label"),
+        hint: game.i18n.localize("TARGETRECALL.setting.marker.duration.description"),
+        scope: "client",
+        config: true,
+        default: 4000,
+        type: Number,
+        range: {
+            min: 0,
+            max: 10000,
+            step: 100
+        }
+    });
+
+    game.settings.register(module, "finder-duration", {
+        name: game.i18n.localize("TARGETRECALL.setting.finder.duration.label"),
+        hint: game.i18n.localize("TARGETRECALL.setting.finder.duration.description"),
+        scope: "client",
+        config: true,
+        default: 4000,
+        type: Number,
+        range: {
+            min: 0,
+            max: 10000,
+            step: 100
+        }
+    });
+
+    game.settings.register(module, "finder-alias-suppress", {
+		name: game.i18n.localize("TARGETRECALL.setting.finder.alias-suppress.label"),
+		hint: game.i18n.localize("TARGETRECALL.setting.finder.alias-suppress.description"),
+		scope: "world",
+		config: true,
+		default: false,
+		type: Boolean
+	});
+
+    game.settings.register(module, "history", {
+		name: game.i18n.localize("TARGETRECALL.setting.history.label"),
+		hint: game.i18n.localize("TARGETRECALL.setting.history.description"),
+		scope: "world",
+		config: true,
+        default: 5,
+        type: Number,
+        range: {
+            min: 1,
+            max: 10,
+            step: 1
+        }
+	});
+
+    game.settings.register(module, "keybind", {
+		name: game.i18n.localize("TARGETRECALL.setting.keybind.label"),
+		hint: game.i18n.localize("TARGETRECALL.setting.keybind.description"),
+		scope: "world",
+		config: true,
+		default: true,
+		type: Boolean,
+        onChange: debouncedReload
+	});
+
     if(game.settings.get(targetRecall.ID, 'keybind')) {
         const {SHIFT, CONTROL, ALT} = KeyboardManager.MODIFIER_KEYS;
         game.keybindings.register(targetRecall.ID, targetRecall.KEYBINDS.BACK, {
@@ -70,7 +131,7 @@ Hooks.once('init', async function() {
             }
             ],
             onDown: () => {
-                targetRecall.recall(true); 
+                targetRecall.recallTargets(true); 
             },
             onUp: () => {},
             restricted: false,
@@ -87,7 +148,7 @@ Hooks.once('init', async function() {
             }
             ],
             onDown: () => {
-                targetRecall.recall(false); 
+                targetRecall.recallTargets(false); 
             },
             onUp: () => {},
             restricted: false,
@@ -95,7 +156,12 @@ Hooks.once('init', async function() {
         });
     }
  });
+
  
+Hooks.once('setup', async function() {
+    api.register();
+});
+
 /**
  * Register debug flag with developer mode's custom hook
  */
@@ -104,23 +170,24 @@ Hooks.once('devModeReady', ({ registerPackageDebugFlag }) => {
 });
 
 Hooks.on('targetToken', (user, token, targeted) => {
+    targetRecall.log(false, 'targetToken', {isSelf: user?.isSelf});
     if(user?.isSelf) {targetRecall.target()}
 });
 
 Hooks.on('controlToken', (token, controlled) => {
+    targetRecall.log(false, 'controlled', {controlled});
     if(controlled){targetRecall.target()}
 });
 
 Hooks.on('updateCombat', async (combat, round, time, combatId) => {
     if(!combat.started){return}
-    let result;
     const token = canvas.tokens.get(combat.current.tokenId)
     if(combat.previous?.combatantId){
-        await targetRecall.set(combat.id, combat.previous.combatantId)
+        if (canvas.tokens.get(combat.previous.tokenId)?.isOwner) await targetRecall.set(combat.id, combat.previous.combatantId, combat.previous.tokenId)
     }
     if (token?.isOwner){
         if(combat.current?.combatantId){
-            result = await targetRecall.recall(true, combat.id, combat.current.combatantId);
+            const result = await targetRecall.recallTargets(true, combat.id, combat.current.combatantId, token.id);
             if(!result){targetRecall.clear(game.user.id)}
         }
         if(game.settings.get(targetRecall.ID, "control")) {
