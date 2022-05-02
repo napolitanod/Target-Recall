@@ -13,11 +13,11 @@
       "keybind.description": "Enables the CTRL+< (i.e comma) and CTRL+> (i.e. period) keybinds for toggling through target history on the token.",
       "marker": {
         "label": "Target Marker",
-        "description": "Select the temporary token marker to be displayed for the current combatant when the controller changes targets.",
+        "description": "Requires Sequencer module installed. Select the temporary token marker to be displayed for the current combatant when the controller changes targets.",
         "duration.label" : "Target Marker Duration",
-        "duration.description": "Indicate in milliseconds how long to display the target marker after targeting",
+        "duration.description": "Indicate in milliseconds how long to display the target marker after targeting (target marker requires Sequencer module installed).",
         "scale.label":"Target Marker Scale",
-        "scale.description": "Scale the target marker size for a 1 x 1 grid-sized token. Marker size will automatically scale relative to token size for larger or smaller sized tokens."
+        "scale.description": "Scale the target marker size for a 1 x 1 grid-sized token. Marker size will automatically scale relative to token size for larger or smaller sized tokens (target marker requires Sequencer module installed)."
       },
       "finder.duration.label" : "Target Finder Duration",
       "finder.duration.description": "Indicate in milliseconds how long to display the target finder after targeting",

@@ -1,5 +1,6 @@
 import {targetRecall} from "./target-recall.js";
 import {api} from './api.js';
+export var targetRecallHasSequencer = false;
 
 Hooks.once('init', async function() { 
     const module = 'target-recall';
@@ -157,9 +158,12 @@ Hooks.once('init', async function() {
     }
  });
 
- 
 Hooks.once('setup', async function() {
     api.register();
+});
+
+Hooks.once('ready', async function() {
+    setModsAvailable();
 });
 
 /**
@@ -210,3 +214,7 @@ Hooks.on('renderTokenHUD', (app, html, options) => {
         }  
     } 
 });
+
+function setModsAvailable () {
+   if (game.modules.get("sequencer")?.active) targetRecallHasSequencer = true;
+}

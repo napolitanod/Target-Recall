@@ -1,4 +1,5 @@
 import{getDistance} from './helpers.js';
+import { targetRecallHasSequencer } from './index.js';
 
 /**
  * A class which holds some constants
@@ -196,7 +197,7 @@ export class recall{
 
   async _ui(current){
     if(!this.users.includes(game.user.id)) return
-    Sequencer.EffectManager.endEffects({ origin: "target_recall_token_marker" })
+    if(targetRecallHasSequencer) Sequencer.EffectManager.endEffects({ origin: "target_recall_token_marker" })
     if(current && this.hasCurrentTargets){
       this._targetsNotify(this.currentRoundTargets)
       this._markTargets(this.currentRoundTargets)
@@ -207,6 +208,7 @@ export class recall{
   }
 
   async _markTargets(targets){
+    if(!targetRecallHasSequencer) return
     const file = game.settings.get(targetRecall.ID, 'marker');
     const dur = game.settings.get(targetRecall.ID, 'marker-duration');
     if(!file || !dur) return
