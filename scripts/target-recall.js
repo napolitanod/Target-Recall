@@ -208,9 +208,10 @@ export class recall{
   }
 
   async _markTargets(targets){
+    if(!targetRecallHasSequencer) return
     const file = game.settings.get(targetRecall.ID, 'marker');
     const dur = game.settings.get(targetRecall.ID, 'marker-duration');
-    if(!file || !dur || !targetRecallHasSequencer) return
+    if(!file || !dur) return
     let s = new Sequence()
       for (const tokenId of targets) { 
         const token = canvas.scene.tokens.get(tokenId);
