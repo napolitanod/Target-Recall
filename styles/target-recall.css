@@ -53,6 +53,15 @@
   overflow-x: hidden;
 }
 
+.tr-crrt-alias {
+  display: inline-block;
+  flex: 0 0 85%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+  font-weight: bold;
+}
+
 .tr-ntfy-dist { 
   display: flex;
   flex: 0 0 15%;
