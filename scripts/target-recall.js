@@ -1,15 +1,14 @@
-import{getDistance} from './helpers.js';
-import { targetRecallHasSequencer } from './index.js';
+import{getDistance, setTargetGoverner, checkTargetGoverner} from './helpers.js';
+import { targetRecallHasSequencer} from './index.js';
 
 /**
  * A class which holds some constants
  */
 export class targetRecall {
-  constructor(combatId = '', combatantId = '', tokenId = '', past = false) {
+  constructor(combatId = '', combatantId = '', tokenId = '') {
     this.combatantId = combatantId,
     this.combatId = combatId,
-    this.tokenId = tokenId,
-    this.past = past;
+    this.tokenId = tokenId;
 
     if(!combatId) this._initialize();
   }
@@ -43,7 +42,7 @@ export class targetRecall {
   }
 
   _initialize(){
-    const c = canvas.tokens.controlled.find(t => t.combatant && t.combatant.combat?.current?.combatantId === t.combatant.id)
+    const c = canvas.scene.tokens.find(t => t.combatant && t.combatant.combat?.current?.combatantId === t.combatant.id && (t.isOwner || game.user.isGM))
     if(c){
       this.combatId = c.combatant.combat.id,
       this.combatantId = c.combatant.id,
@@ -68,11 +67,11 @@ export class targetRecall {
     if (!(checkIf && !game.settings.get(this.ID, "clear"))) game.users.get(userId).updateTokenTargets([])
   }
 
-  static async recallTargets(past = false, combatId = '', combatantId = '', tokenId = ''){
+  static async recallTargets(past = false, showUI = false, combatId = '', combatantId = '', tokenId = ''){
     if(!game.settings.get(targetRecall.ID, 'active')) return false
-    const tr = new targetRecall(combatId, combatantId, tokenId, true)
+    const tr = new targetRecall(combatId, combatantId, tokenId)
     targetRecall.log(false, 'recallTargets', {'targetRecall': tr});
-    const result = await tr.recall.recall(this.past)
+    const result = await tr.recall.recall(past, showUI)
     return result
   }
 
@@ -84,7 +83,6 @@ export class targetRecall {
 
   static async target() {
     const tr = new targetRecall()
-    targetRecall.log(false, 'target', {'targetRecall': tr});
     if(tr.recall) await tr.recall.target();
   } 
 
@@ -144,7 +142,7 @@ export class recall{
   }
 
   get users(){
-    return [game.users.find(gm => gm.isGM)?.id, this.userId]
+    return this.userId// game.users.find(gm => gm.isGM)?.id === this.userId ? this.userId : [game.users.find(gm => gm.isGM)?.id, this.userId]
   }
 
   get validTargets(){
@@ -158,18 +156,21 @@ export class recall{
   async target() {
     this.targets.splice(0, 1, game.user.targets.ids);
     await this.save();
-    targetRecall.log(false, 'recall target', {recall: this});
+    targetRecall.log(false, 'target', {recall: this});
     this._ui(true);
   }
 
-  _next(){
-    targetRecall.log(false, 'next', {recall: this});
+  async _next(showUI = false){
+    let result = false;
     if(this.hasIndexTargets && !canvas.scene.getEmbeddedDocument('Token', this.token.id).getFlag(targetRecall.ID, targetRecall.FLAGS.SUPPRESS + `.${game.user.id}`)){
       game.users.get(this.userId).updateTokenTargets(this.indexTargets);
-      this._ui(false);
-      return true
+      this.targets.splice(0, 1, game.user.targets.ids);
+      if(!game.settings.get(targetRecall.ID, "control") || showUI) this._ui(false);
+      result = true
     } 
-    return false
+    await this.save();
+    targetRecall.log(false, 'next', {recall: this, result: result});
+    return result
   }
 
   async set(){
@@ -181,7 +182,7 @@ export class recall{
     await this.save();
   }
 
-  async recall(past = true){
+  async recall(past = true, showUI = false){
     if (!this.targets.length){return false}
     if (this.index <= 1){
       past ? this.index++ : this.index = this.indexMax
@@ -190,18 +191,19 @@ export class recall{
     } else {
       past ? this.index++: this.index--
     }
-    await this.save();
-    const result = this._next();
+    const result = await this._next(showUI);
     return result
   }
 
   async _ui(current){
     if(!this.users.includes(game.user.id)) return
+    const id = setTargetGoverner(this.userId, this.token.id);
+    if(!await checkTargetGoverner(id, this.userId, this.token.id)) return
     if(targetRecallHasSequencer) Sequencer.EffectManager.endEffects({ origin: "target_recall_token_marker" })
     if(current && this.hasCurrentTargets){
       this._targetsNotify(this.currentRoundTargets)
       this._markTargets(this.currentRoundTargets)
-    } else if(this.hasIndexTargets) {
+    } else if(!current && this.hasIndexTargets) {
       this._targetsNotify(this.indexTargets)
       this._markTargets(this.indexTargets)
     }
@@ -221,16 +223,16 @@ export class recall{
             .opacity(.6)
             .origin('target_recall_token_marker')
             .duration(dur)
-            .fadeOut(dur*.15)
-            .attachTo(token)
+            .fadeOut(dur*.15, {ease: "linear", delay: 0})
+            .attachTo(token, {bindVisibility:true})
             .belowTokens()
-            .forUsers([this.userId, game.users.find(gm => gm.isGM)?.id])
+            .forUsers(this.users)
       }
       s.play()
   }
 
   async _targetsNotify(targets){
-    let innerHtml = ''; 
+    let innerHtml = `<li><img src="${this.token.data.img}"><span class="tr-crrt-alias">Distance from ${this.token.name}:</span></li>`; 
     const dim = canvas.scene.data.gridUnits;
     for(const tokenId of targets){
       const token = canvas.tokens.get(tokenId);

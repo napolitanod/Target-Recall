@@ -1,5 +1,6 @@
 import {targetRecall} from "./target-recall.js";
 import {api} from './api.js';
+
 export var targetRecallHasSequencer = false;
 
 Hooks.once('init', async function() { 
@@ -132,7 +133,7 @@ Hooks.once('init', async function() {
             }
             ],
             onDown: () => {
-                targetRecall.recallTargets(true); 
+                targetRecall.recallTargets(true, true); 
             },
             onUp: () => {},
             restricted: false,
@@ -149,7 +150,7 @@ Hooks.once('init', async function() {
             }
             ],
             onDown: () => {
-                targetRecall.recallTargets(false); 
+                targetRecall.recallTargets(false, true); 
             },
             onUp: () => {},
             restricted: false,
@@ -174,13 +175,17 @@ Hooks.once('devModeReady', ({ registerPackageDebugFlag }) => {
 });
 
 Hooks.on('targetToken', (user, token, targeted) => {
-    targetRecall.log(false, 'targetToken', {isSelf: user?.isSelf});
-    if(user?.isSelf) {targetRecall.target()}
+    if(user?.isSelf && user.id && token.id) {
+        targetRecall.log(false, 'Hook Target', {isSelf: user?.isSelf, user: user, token: token, targeted: targeted});
+        targetRecall.target();
+    }
 });
 
 Hooks.on('controlToken', (token, controlled) => {
-    targetRecall.log(false, 'controlled', {controlled});
-    if(controlled){targetRecall.target()}
+    if(controlled){
+        targetRecall.log(false, 'Hook Control', {token: token, controlled: controlled});
+        targetRecall.target()
+    }
 });
 
 Hooks.on('updateCombat', async (combat, round, time, combatId) => {
@@ -191,7 +196,7 @@ Hooks.on('updateCombat', async (combat, round, time, combatId) => {
     }
     if (token?.isOwner){
         if(combat.current?.combatantId){
-            const result = await targetRecall.recallTargets(true, combat.id, combat.current.combatantId, token.id);
+            const result = await targetRecall.recallTargets(true, false, combat.id, combat.current.combatantId, token.id);
             if(!result){targetRecall.clear(game.user.id)}
         }
         if(game.settings.get(targetRecall.ID, "control")) {
