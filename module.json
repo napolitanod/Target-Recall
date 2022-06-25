@@ -17,8 +17,8 @@
             "path": "languages/en.json"
         }
     ],
-    "minimumCoreVersion": "9",
-    "compatibleCoreVersion": "9",
+    "minimumCoreVersion": "10",
+    "compatibleCoreVersion": "10",
     "name": "target-recall",
     "socket": true,
     "styles": [
