@@ -232,12 +232,12 @@ export class recall{
   }
 
   async _targetsNotify(targets){
-    let innerHtml = `<li><img src="${this.token.data.texture.src}"><span class="tr-crrt-alias">Distance from ${this.token.name}:</span></li>`; 
+    let innerHtml = `<li><img src="${this.token.document.texture.src}"><span class="tr-crrt-alias">Distance from ${this.token.name}:</span></li>`; 
     const dim = canvas.scene.grid.units;
     for(const tokenId of targets){
       const token = canvas.tokens.get(tokenId);
       const alias = game.settings.get(targetRecall.ID, 'finder-alias-suppress') ? '' : token.name ;
-      innerHtml += `<li><img src="${token.data.texture.src}"><span class="tr-ntfy-alias">${alias}</span><span class="tr-ntfy-dist">${getDistance(this.token, token)}${dim}</span></li>`;
+      innerHtml += `<li><img src="${token.document.texture.src}"><span class="tr-ntfy-alias">${alias}</span><span class="tr-ntfy-dist">${getDistance(this.token, token)}${dim}</span></li>`;
     }
     window.targetRecall.targetDistance(`<ol>${innerHtml}</ol>`);
   }
