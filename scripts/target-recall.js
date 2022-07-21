@@ -219,7 +219,7 @@ export class recall{
         const token = canvas.scene.tokens.get(tokenId);
         s = s.effect()
             .file(file)
-            .scale((game.settings.get(targetRecall.ID, 'marker-scale') * Math.max(token.data.height, token.data.width)))
+            .scale((game.settings.get(targetRecall.ID, 'marker-scale') * Math.max(token.height, token.width)))
             .opacity(.6)
             .origin('target_recall_token_marker')
             .duration(dur)
@@ -232,12 +232,12 @@ export class recall{
   }
 
   async _targetsNotify(targets){
-    let innerHtml = `<li><img src="${this.token.data.img}"><span class="tr-crrt-alias">Distance from ${this.token.name}:</span></li>`; 
-    const dim = canvas.scene.data.gridUnits;
+    let innerHtml = `<li><img src="${this.token.document.texture.src}"><span class="tr-crrt-alias">Distance from ${this.token.name}:</span></li>`; 
+    const dim = canvas.scene.grid.units;
     for(const tokenId of targets){
       const token = canvas.tokens.get(tokenId);
-      const alias = game.settings.get(targetRecall.ID, 'finder-alias-suppress') ? '' : token.data.name ;
-      innerHtml += `<li><img src="${token.data.img}"><span class="tr-ntfy-alias">${alias}</span><span class="tr-ntfy-dist">${getDistance(this.token, token)}${dim}</span></li>`;
+      const alias = game.settings.get(targetRecall.ID, 'finder-alias-suppress') ? '' : token.name ;
+      innerHtml += `<li><img src="${token.document.texture.src}"><span class="tr-ntfy-alias">${alias}</span><span class="tr-ntfy-dist">${getDistance(this.token, token)}${dim}</span></li>`;
     }
     window.targetRecall.targetDistance(`<ol>${innerHtml}</ol>`);
   }
