@@ -23,15 +23,15 @@
         "verified": "10",
         "maximum": "10"
       },
-    "name": "target-recall",
+    "id": "target-recall",
     "socket": true,
     "styles": [
         "styles/target-recall.css"
     ],
     "readme": "https://github.com/napolitanod/Target-Recall/blob/main/README.md",
     "title": "Target Recall",
-    "version": "1.2.0.2",
+    "version": "1.2.0.3",
     "url": "https://github.com/napolitanod/Target-Recall",
     "manifest": "https://raw.githubusercontent.com/napolitanod/Target-Recall/master/module.json",
-    "download": "https://github.com/napolitanod/Target-Recall/releases/download/1.2.0.2/module.zip"
+    "download": "https://github.com/napolitanod/Target-Recall/releases/download/1.2.0.3/module.zip"
 }
