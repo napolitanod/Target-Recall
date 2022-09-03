@@ -5,9 +5,6 @@ export var targetRecallHasSequencer = false;
 
 Hooks.once('init', async function() { 
     const module = 'target-recall';
-    const debouncedReload = foundry.utils.debounce(() => {
-        window.location.reload();
-      }, 100);
 
 	game.settings.register(module, "active", {
 		name: game.i18n.localize("TARGETRECALL.setting.active.label"),
@@ -42,6 +39,7 @@ Hooks.once('init', async function() {
         hint: game.i18n.localize("TARGETRECALL.setting.marker.description"),
         scope: "world",
         config: true,
+        default: '',
         type: String,
         filePicker: "imagevideo"
     });
@@ -118,7 +116,7 @@ Hooks.once('init', async function() {
 		config: true,
 		default: true,
 		type: Boolean,
-        onChange: debouncedReload
+		requiresReload: true
 	});
 
     if(game.settings.get(targetRecall.ID, 'keybind')) {
