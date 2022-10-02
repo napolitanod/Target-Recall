@@ -142,11 +142,11 @@ export class recall{
   }
 
   get users(){
-    return this.userId// game.users.find(gm => gm.isGM)?.id === this.userId ? this.userId : [game.users.find(gm => gm.isGM)?.id, this.userId]
+    return game.users.find(gm => gm.isGM && gm.id === this.userId) ? [this.userId] : [...game.users.filter(gm => gm.isGM).map(u => u.id), this.userId]
   }
 
   get validTargets(){
-    return this.combatants.filter(c => game.user.isGM || (!c.isDefeated && c.isVisible && !c.token.hidden)).map(c => c.token.id)
+    return this.combatants.filter(c => game.user.isGM || (!c.isDefeated && c.visible && !c.token.hidden)).map(c => c.token.id)
   }
 
   async save() {
