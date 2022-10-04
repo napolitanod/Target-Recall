@@ -1,5 +1,7 @@
-import {targetRecall} from "./target-recall.js";
+import {targetRecall, recall} from "./target-recall.js";
 import {api} from './api.js';
+import {ui} from './ui.js';
+import {tokenTarget} from './token.js';
 
 export var targetRecallHasSequencer = false;
 
@@ -131,7 +133,7 @@ Hooks.once('init', async function() {
             }
             ],
             onDown: () => {
-                targetRecall.recallTargets(true, true); 
+                recall.recall(true); 
             },
             onUp: () => {},
             restricted: false,
@@ -148,7 +150,7 @@ Hooks.once('init', async function() {
             }
             ],
             onDown: () => {
-                targetRecall.recallTargets(false, true); 
+                recall.recall(false); 
             },
             onUp: () => {},
             restricted: false,
@@ -174,48 +176,36 @@ Hooks.once('devModeReady', ({ registerPackageDebugFlag }) => {
 
 Hooks.on('targetToken', (user, token, targeted) => {
     if(user?.isSelf && user.id && token.id) {
-        targetRecall.log(false, 'Hook Target', {isSelf: user?.isSelf, user: user, token: token, targeted: targeted});
-        targetRecall.target();
+        targetRecall.log(false, 'Hook Target', {user: user, token: token, targeted: targeted});
+        recall.target();
+        ui.go(user.id)
     }
 });
 
 Hooks.on('controlToken', (token, controlled) => {
     if(controlled){
         targetRecall.log(false, 'Hook Control', {token: token, controlled: controlled});
-        targetRecall.target()
+        recall.target()
+        ui.go()
     }
 });
 
-Hooks.on('updateCombat', async (combat, round, time, combatId) => {
-    if(!combat.started){return}
-    const token = canvas.tokens.get(combat.current.tokenId)
-    if(combat.previous?.combatantId){
-        if (canvas.tokens.get(combat.previous.tokenId)?.isOwner) await targetRecall.set(combat.id, combat.previous.combatantId, combat.previous.tokenId)
-    }
-    if (token?.isOwner){
-        if(combat.current?.combatantId){
-            const result = await targetRecall.recallTargets(true, false, combat.id, combat.current.combatantId, token.id);
-            if(!result){targetRecall.clear(game.user.id)}
-        }
+Hooks.on('updateCombat', async (combat, round, time, userId) => {
+    if(!combat.started) return
+    const previous = combat.combatants.find(c => c.id === combat.previous.combatantId)
+    if(previous?.token?.isOwner) await recall.set(combat, previous)
+    if (combat.combatant?.token?.isOwner){
+        const result = await recall.recall(true, combat, combat.combatant);
+        if(!result) recall.clear(userId)
         if(game.settings.get(targetRecall.ID, "control")) {
             canvas.tokens.releaseAll();
-            canvas.tokens.get(token.id).control();
+            canvas.tokens.get(combat.current.tokenId).control();
         }
     }
 });
 
 Hooks.on('renderTokenHUD', (app, html, options) => {
-    if(game.settings.get(targetRecall.ID, 'active')){
-        const token = canvas.scene.getEmbeddedDocument('Token', options._id);
-        if(token){
-            token.getFlag(targetRecall.ID, targetRecall.FLAGS.SUPPRESS + `.${game.user.id}`) ? html.find('div[data-action=target]').addClass('no-target-recall') : html.find('div[data-action=target]').removeClass('no-target-recall')
-            html.find('div[data-action=target]').mousedown(function(event) {
-                if(event.which === 3 && options?._id){
-                    targetRecall.tokenRecall(token, html)
-                }
-            }) 
-        }  
-    } 
+    tokenTarget.go(html, options)
 });
 
 function setModsAvailable () {
