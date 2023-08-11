@@ -1,3 +1,7 @@
+# DEVELOPER, TAKE ME OVER!!!!!
+I have no time to enhance this module or perform and bug fixes, should they come up. If you are a Foundry user with developer skills or wanting to learn, I would love to pass this module code on to a new maintainer. Somebody that can give it the focus and love that I cannot!
+
+
 ![all versions](https://img.shields.io/github/downloads/napolitanod/Target-Recall/total) 
 ![Latest Release Download Count](https://img.shields.io/github/downloads/napolitanod/Target-Recall/latest/module.zip)
 [![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Ftarget-recall&colorB=4aa94a)](https://forge-vtt.com/bazaar#package=target-recall)
