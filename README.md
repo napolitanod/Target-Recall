@@ -1,5 +1,5 @@
 # DEVELOPER, TAKE ME OVER!!!!!
-I have no time to enhance this module or perform and bug fixes, should they come up. If you are a Foundry user with developer skills or wanting to learn, I would love to pass this module code on to a new maintainer. Somebody that can give it the focus and love that I cannot!
+I have no time to enhance this module. If you are a Foundry user with developer skills or wanting to learn, I would love to pass this module code on to a new maintainer. Somebody that can give it the focus and love that I cannot!
 
 
 ![all versions](https://img.shields.io/github/downloads/napolitanod/Target-Recall/total) 
